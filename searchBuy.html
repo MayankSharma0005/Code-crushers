@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUY PROPERTIES</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            position: relative;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .properties {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .property {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .property img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .property-details {
+            padding: 15px;
+        }
+
+        .property-title {
+            font-size: 18px;
+            margin: 0 0 10px;
+        }
+
+        .property-price {
+            font-size: 16px;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .property-location {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BUY PROPERTIES</h1>
+        <div class="filters">
+            <div class="filter">
+                <label for="location">Location</label>
+                <select id="location">
+                    <option value="">All Locations</option>
+                    <option value="GHAZIABAD">GHAZIABAD</option>
+                    <option value="NOIDA">NOIDA</option>
+                    <option value="ALLAHABAD">ALLAHABAD</option>
+                    <option value="LUCKNOW">LUCKNOW</option>
+                    <option value="VARANASI">VARANASI</option>
+                    <option value="AGRA">AGRA</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <label for="min-price">Min Price</label>
+                <input type="number" id="min-price" placeholder="Enter minimum price">
+            </div>
+
+            <div class="filter">
+                <label for="max-price">Max Price</label>
+                <input type="number" id="max-price" placeholder="Enter maximum price">
+            </div>
+
+            <div class="filter">
+                <button id="search-button">Search</button>
+            </div>
+        </div>
+
+        <div class="properties" id="properties">
+            <!-- Property cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const properties = [
+            { id: 1, title: "Modern Apartment in Ghaziabad", price: 45000, location: "GHAZIABAD", image: "./assets/images/property-3.jpg" },
+            { id: 2, title: "Modern flat in Hazaratganj, Lucknow", price: 60000, location: "LUCKNOW", image: "./assets/images/property-4.png" },
+            { id: 3, title: "Urban Studio in gomti Nagar , Lucknow", price: 75000, location: "LUCKNOW", image: "assets/images/urbanstudio.png" },
+        ];
+
+        const searchButton = document.getElementById("search-button");
+        const propertiesContainer = document.getElementById("properties");
+
+        function filterProperties() {
+            const location = document.getElementById("location").value;
+            const minPrice = parseInt(document.getElementById("min-price").value) || 0;
+            const maxPrice = parseInt(document.getElementById("max-price").value) || Infinity;
+
+            const filteredProperties = properties.filter(property => {
+                return (
+                    (location === "" || property.location === location) &&
+                    property.price >= minPrice &&
+                    property.price <= maxPrice
+                );
+            });
+
+            displayProperties(filteredProperties);
+        }
+
+        function displayProperties(properties) {
+            propertiesContainer.innerHTML = "";
+
+            if (properties.length === 0) {
+                propertiesContainer.innerHTML = "<p>No properties found.</p>";
+                return;
+            }
+
+            properties.forEach(property => {
+                const propertyCard = document.createElement("div");
+                propertyCard.classList.add("property");
+                propertyCard.innerHTML = `
+                    <img src="${property.image}" alt="${property.title}">
+                    <div class="property-details">
+                        <h2 class="property-title">${property.title}</h2>
+                        <p class="property-price">$${property.price.toLocaleString()}</p>
+                        <p class="property-location">${property.location}</p>
+                    </div>
+                `;
+                propertiesContainer.appendChild(propertyCard);
+            });
+        }
+
+        searchButton.addEventListener("click", filterProperties);
+
+        // Display all properties by default
+        displayProperties(properties);
+    </script>
+</body>
+</html>
